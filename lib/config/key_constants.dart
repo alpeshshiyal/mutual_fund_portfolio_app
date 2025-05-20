@@ -1,0 +1,4 @@
+class KeyConstants{
+  static const supabaseUrl= "https://pyubodsmruacjjhxtxxb.supabase.co";
+  static const supabaseAnonKey= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5dWJvZHNtcnVhY2pqaHh0eHhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3MjU1NjksImV4cCI6MjA2MzMwMTU2OX0.VzhPvD6R9s6SWrdhuZW4eKZj9GWMUS22wFxkb1S5NJ0";
+}
