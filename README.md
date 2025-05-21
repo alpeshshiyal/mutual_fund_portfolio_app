@@ -53,6 +53,26 @@ A dedicated screen for visualizing mutual fund performance over time.
 
 ---
 
+## 🗂️ State Management
+
+This project uses [Riverpod](https://riverpod.dev/) for state management.
+
+Riverpod provides a robust and scalable way to manage state in Flutter applications, allowing for better testability, performance, and a clean separation of concerns.
+
+### Key Benefits:
+- **Compile-time safety** and **no hidden dependencies**
+- Easy to **scope state** to widgets or the entire app
+- Works seamlessly with **async state**, such as fetching data from APIs
+
+### Why Riverpod?
+Riverpod is chosen over other state management solutions due to its flexibility, simplicity, and excellent support for modern Flutter development practices.
+
+### References:
+- [Riverpod Documentation](https://riverpod.dev/docs)
+- [State Management with Riverpod (Flutter Docs)](https://docs.flutter.dev/data-and-backend/state-mgmt/options#riverpod)
+
+---
+
 ## 📦 Tech Stack
 
 - **Flutter**: UI & logic

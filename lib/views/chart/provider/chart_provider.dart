@@ -27,4 +27,40 @@ class ChartProvider extends ChangeNotifier{
     'MAX': [FlSpot(0, 2), FlSpot(1, 6), FlSpot(2, 5), FlSpot(3, 8)],
   };
 
+
+  //Investment Chart data
+
+  double investmentValue = 1; // in Lakhs
+  bool isOneTime = true;
+  static int valueIn = 100000;
+
+  toggleIsOneTime(index){
+    isOneTime = index == 0;
+    notifyListeners();
+  }
+
+  onChangeInvestmentValue(value) {
+    investmentValue = value;
+    notifyListeners();
+  }
+
+  // Dummy logic: returns based on selected value
+  double getFundReturn() => double.tryParse(((investmentValue*valueIn) * 4.55).toStringAsPrecision(2))??0;
+  double getCategoryReturn() => double.tryParse(((investmentValue*valueIn) * 3.63).toStringAsPrecision(2))??0;
+  double getSavingReturn() => double.tryParse(((investmentValue*valueIn) * 1.19).toStringAsPrecision(2))??0;
+
+  double getProfitPercentage(){
+    var profit = getFundReturn() - (investmentValue*valueIn);
+    var revenue= profit/ (investmentValue*valueIn);
+    var margin = revenue * 100;
+    return margin;
+  }
+  String formatToLakh(num amount) {
+    if (amount >= 100000) {
+      double inLakhs = amount / 100000;
+      return "${inLakhs.toStringAsFixed(inLakhs.truncateToDouble() == inLakhs ? 0 : 1)} L";
+    } else {
+      return amount.toString();
+    }
+  }
 }

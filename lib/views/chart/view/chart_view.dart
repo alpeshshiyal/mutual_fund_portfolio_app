@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mutual_fund_portfolio_app/views/chart/view/investment_chat.dart';
 import '../../../views/chart/provider/chart_provider.dart';
+import '../../widgets/custom_buttons.dart';
 
 
 class MutualFundChartScreen extends StatefulWidget {
@@ -14,8 +16,24 @@ class MutualFundChartScreen extends StatefulWidget {
 
 class _MutualFundChartScreenState extends State<MutualFundChartScreen> {
 
+
   @override
   Widget build(BuildContext context) {
+    final List<Color> gradientColors = [
+      Colors.grey.shade700,
+      Colors.grey.shade800,
+      Colors.grey.shade900,
+    ];
+    final barAreaData =  BarAreaData(
+      show: true,
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: gradientColors
+            .map((color) => color.withValues(alpha: 0.3))
+            .toList(),
+      ),
+    );
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -24,6 +42,9 @@ class _MutualFundChartScreenState extends State<MutualFundChartScreen> {
         leading: IconButton(onPressed: (){
           Navigator.of(context).pop();
         },icon:Icon(Icons.arrow_back_rounded,color: Colors.blue,)),
+        actions: [
+          Icon(Icons.bookmark_add_outlined,color: Colors.white,)
+        ],
       ),
       body: Consumer(
         builder: (context, ref,_) {
@@ -35,99 +56,157 @@ class _MutualFundChartScreenState extends State<MutualFundChartScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Motilal Oswal Midcap\nDirect Growth',
-                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: const [
-                      Text("NAV ₹104.2", style: TextStyle(color: Colors.white)),
-                      SizedBox(width: 10),
-                      Text("1D ₹-4.7", style: TextStyle(color: Colors.white)),
-                      SizedBox(width: 10),
-                      Text("-3.7", style: TextStyle(color: Colors.red)),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: const [
-                      ChartValueBox(label: 'Invested', value: '₹1.5k'),
-                      ChartValueBox(label: 'Current Value', value: '₹1.28k'),
-                      ChartValueBox(label: 'Total Gain', value: '₹-220.16', color: Colors.red),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      ChartLegend(color: Colors.blue, label: 'Your Investments -19.75%'),
-                      ChartLegend(color: Colors.orange, label: 'Nifty Midcap 150 -12.97%'),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
                   Expanded(
-                    child: LineChart(
-                      LineChartData(
-                        gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              interval: 1,
-                              getTitlesWidget: (value, _) {
-                                final year = 2022 + value.toInt();
-                                return Text('$year', style: const TextStyle(color: Colors.white, fontSize: 12));
-                              },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Motilal Oswal Midcap\nDirect Growth',
+                            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              buildRow(title: "NAV ",value:"₹104.2" ),
+                              SizedBox(width: 10),
+                              buildRow(title:"1D ", value: "₹-4.7"),
+                              Icon(Icons.keyboard_arrow_down,color: Colors.red,size: 20,),
+                              SizedBox(width: 5),
+                              Text("-3.7", style: TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          customContainer(
+                           child: IntrinsicHeight(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  ChartValueBox(label: 'Invested', value: '₹1.5k'),
+                                  VerticalDivider(color: Colors.grey.shade800,),
+                                  ChartValueBox(label: 'Current Value', value: '₹1.28k'),
+                                  VerticalDivider(color: Colors.grey.shade800,),
+                                  ChartValueBox(label: 'Total Gain',
+                                      value: '₹-220.16',
+                                      value2: '-14.7',
+                                      color: Colors.white),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        borderData: FlBorderData(show: false),
-                        minX: 0,
-                        maxX: 3,
-                        minY: 0,
-                        maxY: 10,
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: userSpots,
-                            isCurved: true,
-                            color: Colors.blue,
-                            barWidth: 3,
-                            dotData: FlDotData(show: false),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  ChartLegend(color: Colors.blue, label: 'Your Investments  -19.75%'),
+                                  ChartLegend(color: Colors.orange, label: 'Nifty Midcap 150  -12.97%'),
+                                ],
+                              ),
+                              Spacer(),
+                              customContainer(
+                                padding: EdgeInsets.symmetric(vertical: 8,horizontal: 18),
+                                child: Text("Nav",style: TextStyle(color: Colors.grey),),
+                              )
+                            ],
                           ),
-                          LineChartBarData(
-                            spots:benchmarkSpots,
-                            isCurved: true,
-                            color: Colors.orange,
-                            barWidth: 3,
-                            dotData: FlDotData(show: false),
+                          const SizedBox(height: 20),
+                          Container(
+                            height: 200,
+                            child: LineChart(
+                              LineChartData(
+                                gridData: FlGridData(show: false),
+                                titlesData: FlTitlesData(
+                                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      interval: 1,
+                                      getTitlesWidget: (value, _) {
+                                        final year = 2022 + value.toInt();
+                                        return Container(
+                                          padding: EdgeInsets.only(
+                                              left:value==0?30:0,
+                                              right:value==3?30:0,
+                                          ),
+                                          // decoration: BoxDecoration(
+                                          //   border: Border(top: BorderSide(color: Colors.grey))
+                                          // ),
+                                            child: Text('$year', style: const TextStyle(color: Colors.white, fontSize: 12))
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                borderData: FlBorderData(show: false),
+                                minX: 0,
+                                maxX: 3,
+                                minY: 0,
+                                maxY: 10,
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    spots: userSpots,
+                                    isCurved: true,
+                                    color: Colors.blue,
+                                    barWidth: 2,
+                                    dotData: FlDotData(show: false),
+                                    belowBarData:barAreaData
+                                  ),
+                                  LineChartBarData(
+                                    spots:benchmarkSpots,
+                                    isCurved: true,
+                                    color: Colors.orange,
+                                    barWidth: 2,
+                                    dotData: FlDotData(show: false),
+                                    belowBarData:barAreaData
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
+                          const SizedBox(height: 20),
+                          customContainer(
+                            padding: EdgeInsets.symmetric(vertical: 02,horizontal: 2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: ['1M', '3M', '6M', '1Y', '3Y', 'MAX']
+                                  .map(
+                                    (label) => GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      chartProviderRef.selectedDuration = label;
+                                    });
+                                  },
+                                  child: ChartTab(label: label, selected: chartProviderRef.selectedDuration == label),
+                                ),
+                              ).toList(),
+                            ),
+                          ),
+                          SizedBox(height: 50,),
+                          SizedBox(
+                            height: 500,
+                            child: InvestmentChart()
+                          )
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  // Bottom Buttons
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: ['1M', '3M', '6M', '1Y', '3Y', 'MAX']
-                        .map(
-                          (label) => GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            chartProviderRef.selectedDuration = label;
-                          });
-                        },
-                        child: ChartTab(label: label, selected: chartProviderRef.selectedDuration == label),
+                    children: [
+                      Expanded(
+                        child: CustomButton(title: "Sell",),
                       ),
-                    )
-                        .toList(),
-                  ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: CustomButton(title: "Invest More"),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -136,14 +215,39 @@ class _MutualFundChartScreenState extends State<MutualFundChartScreen> {
       ),
     );
   }
+
+  Widget customContainer({
+    double? height,
+    Widget? child, EdgeInsets? padding}){
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade800),
+          borderRadius: BorderRadius.all(Radius.circular(8))
+      ),
+      height: height,
+      padding:padding?? EdgeInsets.all(18),
+      child: child,
+    );
+  }
+  Row buildRow({String? title,String? value}) {
+    return Row(
+          children: [
+            Text(title??"",
+                style: TextStyle(color: Colors.grey,fontSize: 11)),
+            Text(value??"",
+                style: TextStyle(color: Colors.white)),
+          ],
+        );
+  }
 }
 
 class ChartValueBox extends StatelessWidget {
   final String label;
   final String value;
+  final String? value2;
   final Color? color;
 
-  const ChartValueBox({super.key, required this.label, required this.value, this.color});
+  const ChartValueBox({super.key, required this.label, required this.value, this.color, this.value2});
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +255,19 @@ class ChartValueBox extends StatelessWidget {
       children: [
         Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(color: color ?? Colors.white, fontSize: 16)),
+        Row(
+          children: [
+            Text(value, style: TextStyle(color: color ?? Colors.white, fontSize: 16)),
+            SizedBox(width: 5,),
+            if(value2!=null)
+            Row(
+              children: [
+                Icon(Icons.keyboard_arrow_down,color: Colors.red,size: 20,),
+                Text(value2??"", style: TextStyle(color:Colors.red, fontSize: 16)),
+              ],
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -167,9 +283,9 @@ class ChartLegend extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(width: 10, height: 10, color: color),
+        Container(width: 25, height: 2  , color: color),
         const SizedBox(width: 6),
-        Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }
@@ -188,7 +304,7 @@ class ChartTab extends StatelessWidget {
       decoration: BoxDecoration(
         color: selected ? Colors.blue : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade700),
+        // border: Border.all(color: Colors.grey.shade700),
       ),
       child: Text(label, style: const TextStyle(color: Colors.white)),
     );

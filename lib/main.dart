@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: Routes.generateRoutes,
         initialRoute: AuthGate.routeName,
+        // home: InvestmentChartScreen(),
       ),
     );
   }
